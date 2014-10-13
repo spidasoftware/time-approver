@@ -1,0 +1,20 @@
+{
+  "name": "atom-shell-default-app",
+  "productName": "Atom Shell Default App",
+  "version": "0.1.0",
+  "main": "main.js",
+  "dependencies": {
+    "async": "^0.9.0",
+    "bluebird": "~2.1.3",
+    "cheerio": "~0.17.0",
+    "colors": "^0.6.2",
+    "dateformat": "^1.0.8-1.2.3",
+    "datejs": "^1.0.0-rc1",
+    "lodash": "^2.4.1",
+    "moment": "^2.8.3",
+    "optimist": "~0.6.1",
+    "ramda": "~0.2.2",
+    "request": "~2.36.0",
+    "xmlhttprequest-cookie": "^0.9.1"
+  }
+}
