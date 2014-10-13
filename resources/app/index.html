@@ -27,6 +27,9 @@
   </style>
 </head>
 <body>
+  <script>
+    window.$ = window.jQuery = require("jquery.js");
+  </script>
     <script>
     require('ipc').on('printer', function(message) {
       $("#console").append(message+"<br>")
