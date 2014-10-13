@@ -32,6 +32,10 @@
   </script>
     <script>
     require('ipc').on('printer', function(message) {
+      message = message.replace("[31m", "<font color='darkred'>")
+      message = message.replace("[32m", "<font color='darkyellow'>")
+      message = message.replace("[33m", "<font color='darkgreen'>")
+      message = message.replace("[39m", "</font>")
       $("#console").append(message+"<br>")
     });
   </script>
