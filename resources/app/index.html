@@ -27,6 +27,11 @@
   </style>
 </head>
 <body>
-
+    <script>
+    require('ipc').on('printer', function(message) {
+      $("#console").append(message+"<br>")
+    });
+  </script>
+  <div id="console"></div>
 </body>
 </html>

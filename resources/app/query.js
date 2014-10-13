@@ -123,15 +123,18 @@ var requestEmployeeTime = function (employee, companyId, employeeTimeMap, callba
             //Trigger the next one.
             callback(employeeTimeList);
         } catch (err) {
-            console.error(err + employeeTimeMap);
-            console.log("Error on " + employee + " " + companyId);
             requestEmployeeTime(employee, companyId, employeeTimeMap, callback, approve)
         }
     });
 };
 
-var query = function (approve) {
-    console.log("From: " + startDate + " to " + endDate);
+var query = function (approve, printer) {
+
+    if(!printer){
+      printer=console.log
+    }
+
+    printer("From: " + startDate + " to " + endDate);
 
     req({
         url: cfg.server + cfg.initial
@@ -150,7 +153,7 @@ var query = function (approve) {
         if (body.indexOf('You are signed in as' > 0)) {
             return req({url: cfg.server + cfg.timePage});
         } else {
-            console.log("You are not logged in")
+            printer("You are not logged in")
         }
     }).then(function () {
 
@@ -162,7 +165,7 @@ var query = function (approve) {
         var employeeTimeMap = {};
 
         _.each(workers, function (employee) {
-            console.log("Employee " + employee.name);
+            printer("Employee " + employee.name);
             employeeTimeMap[employee.name] = [];
 
             // 1st para in async.each() is the array of items
@@ -176,21 +179,21 @@ var query = function (approve) {
                     // All tasks are done now, if not approving print time form employee
 
                     if (!approve) {
-                        console.log(employee.name.yellow);
+                        printer(employee.name.yellow);
                         _.each(employeeTimeList[0], function (entry) {
                             var logString = entry.time + " " + entry.date + ": " + entry.info;
                             if (entry.approved) {
-                                console.log(logString.green);
+                                printer(logString.green);
                             } else {
-                                console.log(logString.red);
+                                printer(logString.red);
                             }
                         });
                         var sum = 0;
                         _.each(employeeTimeList[0], function (entry) {
                             sum += parseFloat(entry.time)
                         });
-                        console.log("Total: " + sum);
-                        console.log("---------------------------------------------------")
+                        printer("Total: " + sum);
+                        printer("---------------------------------------------------")
                     }
                 }
             );

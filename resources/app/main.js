@@ -2,6 +2,7 @@ var app = require('app');
 var Menu = require('menu');
 var MenuItem = require('menu-item');
 var BrowserWindow = require('browser-window');
+var ipc = require('ipc');
 
 var query = require('./query.js');
 
@@ -23,7 +24,13 @@ app.on('ready', function() {
     'use-content-size': true,
   });
   mainWindow.loadUrl('file://' + __dirname + '/index.html');
+
+  var printer = function(message){
+    mainWindow.webContents.send('printer', message)
+  }
+
   mainWindow.focus();
+
 
      var template = [
       {
@@ -31,11 +38,11 @@ app.on('ready', function() {
         submenu: [
           {
             label: 'Review',
-            click: function() { query(); }
+            click: function() { query(false, printer); }
           },          
           {
             label: 'Approve',
-            click: function() { query(true); }
+            click: function() { query(true, printer); }
           },
           {
             label: 'Close',
