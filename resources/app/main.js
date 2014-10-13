@@ -3,6 +3,8 @@ var Menu = require('menu');
 var MenuItem = require('menu-item');
 var BrowserWindow = require('browser-window');
 
+var query = require('./query.js');
+
 var mainWindow = null;
 var menu = null;
 
@@ -29,11 +31,11 @@ app.on('ready', function() {
         submenu: [
           {
             label: 'Review',
-            click: function() { mainWindow.close(); }
+            click: function() { query(); }
           },          
           {
             label: 'Approve',
-            click: function() { mainWindow.close(); }
+            click: function() { query(true); }
           },
           {
             label: 'Close',
