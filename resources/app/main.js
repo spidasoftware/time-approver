@@ -49,6 +49,25 @@ app.on('ready', function() {
             click: function() { mainWindow.close(); }
           },
         ]
+      },
+      {
+        label: 'View',
+        submenu: [
+          {
+            label: 'Reload',
+            accelerator: 'Ctrl+R',
+            click: function() { mainWindow.restart(); }
+          },
+          {
+            label: 'Enter Fullscreen',
+            click: function() { mainWindow.setFullScreen(true); }
+          },
+          {
+            label: 'Toggle DevTools',
+            accelerator: 'Alt+Ctrl+I',
+            click: function() { mainWindow.toggleDevTools(); }
+          },
+        ]
       }
     ];
 
