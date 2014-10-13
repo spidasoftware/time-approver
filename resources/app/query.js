@@ -8,8 +8,8 @@ var async = require('async');
 
 var moment = require('moment');
 var colors = require('colors');
-
-var cfgText = fs.readFileSync(process.env.HOME + '/.timeConfig.json', {
+var userHome = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+var cfgText = fs.readFileSync(userHome + '/.timeConfig.json', {
     encoding: 'utf8'
 });
 
