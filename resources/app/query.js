@@ -122,7 +122,7 @@ var requestEmployeeTime = function (employee, callback, approve) {
                         }, function (error, response, body) {
                             if (error || body !== "") {
                                 //Check the response body, because sometimes min sends XML if there is an error
-                                console.log("Error approving time for " + employee + ", trying again.");
+                                printer("Error approving time for " + employee + ", trying again.");
                                 approveTime(time)
                             }
                         })
@@ -134,7 +134,7 @@ var requestEmployeeTime = function (employee, callback, approve) {
             //Trigger the next one.
             callback(null, _.flatten(employeeTimeList));
         } catch (err) {
-            console.log("Error requesting time for " + employee + ", trying again.");
+            printer("Error requesting time for " + employee + ", trying again.");
             requestEmployeeTime(employee, callback, approve)
         }
     });
@@ -182,12 +182,12 @@ var query = function (approve, printer) {
                 //Let try to not bring down min, randomly distribute the requests of 5 seconds.
                 var wait = Math.round(Math.random() * 10000);
                 if (!approve) {
-                    console.log("Requesting time for " + employee + " in "+wait+" seconds.");
+                    printer("Requesting time for " + employee + " in "+wait+" seconds.");
                 }
                 setTimeout(function(){requestEmployeeTime(employee, callback, approve)}, wait);
             }
         });
-        console.log("Requesting time for employees, spacing calls out over 10 seconds so we don't bring down SPIDAMin");
+        printer("Requesting time for employees, spacing calls out over 10 seconds so we don't bring down SPIDAMin");
         async.parallel(par,
             //Called when completed
             function (errors, results) {
