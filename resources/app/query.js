@@ -64,9 +64,9 @@ var parseTimeBody = function (body) {
 var startDate = moment().day(-6).format("MM/DD/YYYY");
 var endDate = moment().day(0).format("MM/DD/YYYY");
 
-var requestEmployeeTime = function (employee, employeeTimeMap, callback, approve) {
+var requestEmployeeTime = function (employee, callback, approve) {
     var result = "searchTimeByEmployee=" + "&employeeName=" + encodeURIComponent(employee)
-        + "&compId=all&startDate=" + encodeURIComponent(startDate)
+        + "&compId=" + encodeURIComponent("all") + "&startDate=" + encodeURIComponent(startDate)
         + "&endDate=" + encodeURIComponent(endDate);
 
     var url = cfg.server + cfg.approveTime;
@@ -122,7 +122,7 @@ var requestEmployeeTime = function (employee, employeeTimeMap, callback, approve
                         }, function (error, response, body) {
                             if (error || body !== "") {
                                 //Check the response body, because sometimes min sends XML if there is an error
-                                console.log("Error on " + employee + " trying again.");
+                                console.log("Error approving time for " + employee + ", trying again.");
                                 approveTime(time)
                             }
                         })
@@ -132,9 +132,10 @@ var requestEmployeeTime = function (employee, employeeTimeMap, callback, approve
                 approveTime(time);
             }
             //Trigger the next one.
-            callback(employeeTimeList);
+            callback(null, _.flatten(employeeTimeList));
         } catch (err) {
-            requestEmployeeTime(employee, employeeTimeMap, callback, approve)
+            console.log("Error requesting time for " + employee + ", trying again.");
+            requestEmployeeTime(employee, callback, approve)
         }
     });
 };
@@ -173,40 +174,47 @@ var query = function (approve, printer) {
             workers.push(cfg.me)
         }
 
-        var employeeTimeMap = {};
-        _.each(workers, function(employee){
-            employeeTimeMap[employee] = [];
-        });
-
         // 1st para in async.each() is the array of items
-        async.each(workers,
-            function (employee, callback) {
-                requestEmployeeTime(employee, employeeTimeMap, callback, approve)
-            },
-
+        // https://github.com/caolan/async#parallel
+        var par = {}
+        _.each(workers, function (employee) {
+            par[employee] = function (callback) {
+                //Let try to not bring down min, randomly distribute the requests of 5 seconds.
+                var wait = Math.round(Math.random() * 10000);
+                if (!approve) {
+                    console.log("Requesting time for " + employee + " in "+wait+" seconds.");
+                }
+                setTimeout(function(){requestEmployeeTime(employee, callback, approve)}, wait);
+            }
+        });
+        console.log("Requesting time for employees, spacing calls out over 10 seconds so we don't bring down SPIDAMin");
+        async.parallel(par,
             //Called when completed
-            function (employeeTimeList) {
+            function (errors, results) {
                 // All tasks are done now, if not approving print time form employee
 
                 if (!approve) {
-                    printer(employee.yellow);
-                    _.each(employeeTimeList[0], function (entry) {
-                        var logString = entry.time + " " + entry.date + ": " + entry.info;
-                        if (entry.approved) {
-                            printer(logString.green);
-                        } else {
-                            printer(logString.red);
-                        }
+                    //Hijacking what I think is the err message for the call back
+                    _.forIn(results, function (times, name) {
+
+                        printer(name.yellow);
+                        _.each(times, function (entry) {
+                            var logString = entry.time + " " + entry.date + ": " + entry.info;
+                            if (entry.approved) {
+                                printer(logString.green);
+                            } else {
+                                printer(logString.red);
+                            }
+                        });
+                        var sum = 0;
+                        _.each(times, function (entry) {
+                            sum += parseFloat(entry.time)
+                        });
+                        printer("Total: " + sum);
+                        printer("---------------------------------------------------")
                     });
-                    var sum = 0;
-                    _.each(employeeTimeList[0], function (entry) {
-                        sum += parseFloat(entry.time)
-                    });
-                    printer("Total: " + sum);
-                    printer("---------------------------------------------------")
                 }
-            }
-        );
+            })
     });
 };
 
