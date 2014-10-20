@@ -96,29 +96,39 @@ var requestEmployeeTime = function (employee, companyId, employeeTimeMap, callba
             });
             employeeTimeList.push(time);
             if (approve) {
-
                 var approveTime = function (time) {
-                    var result = "approveAll=" + _.map(time, function (entry) {
-                        return entry.id
-                    }).join(",");
-                    req({
-                        url: url,
-                        headers: {
-                            'Referer': 'http://spidamin.com/portal/group/10137/time-reporting?p_p_id=TimeReportingPortlet_WAR_TimeReportingPortlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_TimeReportingPortlet_WAR_TimeReportingPortlet_action=approveTimeReporting',
-                            'Content-type': 'application/x-www-form-urlencoded',
-                            'Accept': "*/*"
-                        },
-                        jar: jar,
-                        followAllRedirects: true,
-                        method: 'POST',
-                        body: result
-                    }, function (error, response, body) {
-                        if (error) {
-                            approveTime(time)
-                        }
+                    var notApproved = _.filter(time, function (entry) {
+                        return !entry.approved
                     })
-                }
+                    var ids = _.map(notApproved, function (entry) {
+                        return entry.id
+                    })
+                    console.log("Approving "+ids.length + " entries out of "+time.length+" for "+employee)
+                    var result = "approveAll=" + ids.join(",");
 
+                    //Only approve this employee if there are unapproved entries.
+                    if(ids.length>0){
+                      request({
+                          url: url,
+                          headers: {
+                              'Referer': 'http://spidamin.com/portal/group/10137/time-reporting?p_p_id=TimeReportingPortlet_WAR_TimeReportingPortlet&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_TimeReportingPortlet_WAR_TimeReportingPortlet_action=approveTimeReporting',
+                              'Content-type': 'application/x-www-form-urlencoded',
+                              'Accept': "*/*"
+                          },
+                          jar: jar,
+                          followAllRedirects: true,
+                          method: 'POST',
+                          body: result
+                      }, function (error, response, body) {
+                          if (error || body!=="") {
+                            //Check the response body, because sometimes min sends XML if there is an error
+                            console.log("Error on "+employee+ " trying again.");
+                            approveTime(time)
+                          }
+                      })
+                    }
+                }
+                approveTime(time);
             }
             //Trigger the next one.
             callback(employeeTimeList);
