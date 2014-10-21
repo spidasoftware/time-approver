@@ -11,7 +11,8 @@ node shell
 
 ### Configuration:
 
-add a `.timeConfig.json` to your users home, i.e. "\Users\someguy" and add the employees you want to approve: 
+add a `.timeConfig.json` to your users home, i.e. "\Users\someguy" and add the employees you want to approve.  Here is an example:
+
 ```
 {
   "email": "your@email.com",
@@ -23,3 +24,5 @@ add a `.timeConfig.json` to your users home, i.e. "\Users\someguy" and add the e
   "me": "Doe, John"
 }
 ```
+
+It is a JSON file and you can find online editors if you need to edit it there. http://www.jsoneditoronline.org/
