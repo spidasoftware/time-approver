@@ -64,7 +64,7 @@ var parseTimeBody = function (body) {
 var startDate = moment().day(-6).format("MM/DD/YYYY");
 var endDate = moment().day(0).format("MM/DD/YYYY");
 
-var requestEmployeeTime = function (employee, callback, approve) {
+var requestEmployeeTime = function (employee, callback, approve, printer) {
     var result = "searchTimeByEmployee=" + "&employeeName=" + encodeURIComponent(employee)
         + "&compId=" + encodeURIComponent("all") + "&startDate=" + encodeURIComponent(startDate)
         + "&endDate=" + encodeURIComponent(endDate);
@@ -135,7 +135,7 @@ var requestEmployeeTime = function (employee, callback, approve) {
             callback(null, _.flatten(employeeTimeList));
         } catch (err) {
             printer("Error requesting time for " + employee + ", trying again.");
-            requestEmployeeTime(employee, callback, approve)
+            requestEmployeeTime(employee, callback, approve, printer)
         }
     });
 };
@@ -184,7 +184,7 @@ var query = function (approve, printer) {
                 if (!approve) {
                     printer("Requesting time for " + employee + " in "+wait+" seconds.");
                 }
-                setTimeout(function(){requestEmployeeTime(employee, callback, approve)}, wait);
+                setTimeout(function(){requestEmployeeTime(employee, callback, approve, printer)}, wait);
             }
         });
         printer("Requesting time for employees, spacing calls out over 10 seconds so we don't bring down SPIDAMin");
