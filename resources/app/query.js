@@ -122,8 +122,8 @@ var requestEmployeeTime = function (employee, callback, approve, printer) {
                         }, function (error, response, body) {
                             if (error || body !== "") {
                                 //Check the response body, because sometimes min sends XML if there is an error
-                                printer("Error approving time for " + employee + ", trying again.");
-                                approveTime(time)
+                                printer("Error ("+error+") approving time for " + employee + ", trying again." + (body!=="")) ;
+                                requestEmployeeTime(employee, callback, approve, printer)
                             }
                         })
                     }
