@@ -125,15 +125,19 @@ var requestEmployeeTime = function (employee, callback, approve, printer) {
                                 printer("Error ("+error+") approving time for " + employee + ", trying again." );
                                 printer("Body: "+body.trim()) ;
                                 requestEmployeeTime(employee, callback, approve, printer)
+                            }else{
+                                //Trigger the next one.
+                                callback(null, _.flatten(employeeTimeList));
                             }
                         })
                     }
                 };
                 //Call the approve time loop.
                 approveTime(time);
+            }else{
+              //Trigger the next one.
+              callback(null, _.flatten(employeeTimeList));
             }
-            //Trigger the next one.
-            callback(null, _.flatten(employeeTimeList));
         } catch (err) {
             printer("Error ("+err+")requesting time for " + employee + ", trying again.");
             requestEmployeeTime(employee, callback, approve, printer)
