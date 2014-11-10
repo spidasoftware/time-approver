@@ -103,7 +103,7 @@ var requestEmployeeTime = function (employee, callback, approve, printer) {
                     var ids = _.map(notApproved, function (entry) {
                         return entry.id
                     });
-                    console.log("Approving " + ids.length + " entries out of " + time.length + " for " + employee)
+                    printer("Approving " + ids.length + " entries out of " + time.length + " for " + employee)
                     var result = "approveAll=" + ids.join(",");
 
                     //Only approve this employee if there are unapproved entries.
@@ -120,9 +120,10 @@ var requestEmployeeTime = function (employee, callback, approve, printer) {
                             method: 'POST',
                             body: result
                         }, function (error, response, body) {
-                            if (error || body !== "") {
+                            if (error || body.trim() !== "") {
                                 //Check the response body, because sometimes min sends XML if there is an error
-                                printer("Error ("+error+") approving time for " + employee + ", trying again." + (body!=="")) ;
+                                printer("Error ("+error+") approving time for " + employee + ", trying again." );
+                                printer("Body: "+body.trim()) ;
                                 requestEmployeeTime(employee, callback, approve, printer)
                             }
                         })
@@ -134,7 +135,7 @@ var requestEmployeeTime = function (employee, callback, approve, printer) {
             //Trigger the next one.
             callback(null, _.flatten(employeeTimeList));
         } catch (err) {
-            printer("Error requesting time for " + employee + ", trying again.");
+            printer("Error ("+err+")requesting time for " + employee + ", trying again.");
             requestEmployeeTime(employee, callback, approve, printer)
         }
     });
