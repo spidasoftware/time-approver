@@ -173,11 +173,11 @@ var query = function (approve, printer) {
             printer("You are not logged in")
         }
     }).then(function () {
-        printer("Not approving: "+(!approve) )
         var workers = cfg.employees;
         if (!approve) {
             workers.push(cfg.me)
         }
+        printer("Workers: "+JSON.stringify(workers) )
 
         // 1st para in async.each() is the array of items
         // https://github.com/caolan/async#parallel
