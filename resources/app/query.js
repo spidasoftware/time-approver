@@ -185,6 +185,7 @@ var query = function (approve, printer) {
         _.each(workers, function (employee) {
             if(employee.indexOf(", ")<0){
               printer(("ERROR "+ employee + " does not contain a comma and a space after the first name, please fix and try again.").red)
+              printer("The approver must be restarted to reload the config".red)
               throw "tmeConfig.json employee is misconfigured."
             }
             par[employee] = function (callback) {
