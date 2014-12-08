@@ -173,7 +173,7 @@ var query = function (approve, printer) {
             printer("You are not logged in")
         }
     }).then(function () {
-
+        printer("Not approving: "+(!approve) )
         var workers = cfg.employees;
         if (!approve) {
             workers.push(cfg.me)
