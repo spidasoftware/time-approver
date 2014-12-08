@@ -151,7 +151,7 @@ var query = function (approve, printer) {
         printer = console.log
     }
 
-    printer("From: " + startDate + " to " + endDate);
+    printer("From: " + startDate + " to " + endDate + " and approving: "+approve);
 
     req({
         url: cfg.server + cfg.initial
