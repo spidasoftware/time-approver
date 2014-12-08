@@ -177,12 +177,15 @@ var query = function (approve, printer) {
         if (!approve) {
             workers.push(cfg.me)
         }
-        printer("Workers: "+JSON.stringify(workers) )
+        printer("Approving workers: "+JSON.stringify(workers) )
 
         // 1st para in async.each() is the array of items
         // https://github.com/caolan/async#parallel
         var par = {}
         _.each(workers, function (employee) {
+            if(employee.indexOf(", ")<0){
+              printer(("ERROR "+ employee + " does not contain a comma and a space after the first name, please fix and try again.").red)
+            }
             par[employee] = function (callback) {
                 //Let try to not bring down min, randomly distribute the requests of 5 seconds.
                 var wait = Math.round(Math.random() * 10000);
