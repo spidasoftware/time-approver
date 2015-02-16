@@ -173,7 +173,7 @@ var query = function (approve, printer) {
             printer("You are not logged in")
         }
     }).then(function () {
-        var workers = cfg.employees;
+        var workers = cfg.employees.slice(0);
         if (!approve) {
             workers.push(cfg.me)
         }
