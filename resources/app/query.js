@@ -89,7 +89,7 @@ var requestEmployeeTime = function (employee, callback, approve, printer) {
                 return {
                     id: Object.keys(entry)[0],
                     date: values[0],
-                    info: values[1] + " " + values[2] + " " + values[3] + " " + values[7],
+                    info: values[1] + " " + values[2] + " " + values[3] + " " + values[7] + " ("+values[8]+")",
                     time: values[4],
                     approved: values[6] === "Approved"
                 };
