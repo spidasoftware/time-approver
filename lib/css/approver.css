@@ -13,3 +13,5 @@
 div.row {
 	max-width: 100%;
 }
+
+div.row:hover { background-color: #eeeeee;}

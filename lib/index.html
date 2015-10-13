@@ -10,19 +10,16 @@
   </script>
   <script>
 
-    var disapprove = function(id){
+    var disapprove = function(id, originalReason){
       var smalltalk = require("smalltalk");
-      smalltalk.prompt('Question', 'Why are you dissapproving?', 'Enter a reason').then(function(value) {
-        var ipc = require('ipc');
-        var disapproved = ipc.sendSync('disapprove', id, value);
-        if(disapproved){
-          $(".message"+id).addClass("error")
-        }else{
-          smalltalk.alert('Error', 'There was an error!')
-        }
-      }, function() {
-          console.log('cancel');
-      });
+      var ipc = require('ipc');
+      console.log(originalReason+": "+value);
+      // var disapproved = ipc.sendSync('disapprove', id, originalReason+": "+value);
+      if(disapproved){
+        $(".message"+id).addClass("error")
+      }else{
+        smalltalk.alert('Error', 'There was an error!')
+      }
     }
 
     require('ipc').on('about', function() {
@@ -38,19 +35,20 @@
       if(type=="heading"){
         div += "<div class='columns small-12'><h3>"+message+"</h3></div>"
       }else if(type=="time"){
-        div += "<div class='columns large-3 message"+message.id+"'>"
+        var m = message.description.split("'").join("\\'")
+        div += "<div class='columns large-4 message"+message.id+"'>"
           div += "<div class='row'>"
-            div += "<div class='columns small-3'><button class='tiny radius' onClick=\"disapprove('"+message.id+"')\">"+"X"+"</button></div>"
+            div += "<div class='columns small-3'><a href='#' onClick=\"disapprove('"+message.id+"', '"+m+"')\">"+"X"+"</a><input type='text'/></div>"
             div += "<div class='columns small-4'>"+message.date+"</div>"
             div += "<div class='columns small-2'>"+message.time+"</div>"
             div += "<div class='columns small-3'>"+message.billing+"</div>"
           div += "</div>"
         div += "</div>"
-        div += "<div class='columns large-9 message"+message.id+"'>"
+        div += "<div class='columns large-8 message"+message.id+"'>"
           div += "<div class='row'>"
-            div += "<div class='columns small-3'>"+message.task+"</div>"
+            div += "<div class='columns small-2'>"+message.task+"</div>"
             div += "<div class='columns small-3'>"+message.proposal+"</div>"
-            div += "<div class='columns small-6'>"+message.description+"</div>"
+            div += "<div class='columns small-7'>"+message.description+"</div>"
           div += "</div>"
         div += "</div>"
       }else{
