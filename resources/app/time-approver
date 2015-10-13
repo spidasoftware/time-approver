@@ -1,6 +1,0 @@
-#!/usr/bin/env node
-var query = require('./query.js');
-
-var argv = require('optimist').argv;
-
-query(argv.approve);

@@ -1,13 +1,14 @@
 time-approver
 =============
 
-node shell
+electron shell
 
 ### Usage:
 
-1. Download this zip
-2. Extract
-3. Double click the atom.exe
+1. clone
+2. `npm install`
+3. `grunt`
+1. open the electron.exe inside the build folder for windows or the electron.app on OS X
 
 ### Configuration:
 

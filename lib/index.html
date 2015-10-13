@@ -1,0 +1,65 @@
+<html>
+<head>
+  <title>Time-Approver</title>
+  <link rel="stylesheet" href="./css/smalltalk.css">
+  <link rel="stylesheet" href="./css/foundation.custom.css">
+  <link rel="stylesheet" href="./css/approver.css">
+<body>
+  <script>
+    window.$ = window.jQuery = require("jquery");
+  </script>
+  <script>
+
+    var disapprove = function(id){
+      var smalltalk = require("smalltalk");
+      smalltalk.prompt('Question', 'Why are you dissapproving?', 'Enter a reason').then(function(value) {
+        var ipc = require('ipc');
+        var disapproved = ipc.sendSync('disapprove', id, value);
+        if(disapproved){
+          $(".message"+id).addClass("error")
+        }else{
+          smalltalk.alert('Error', 'There was an error!')
+        }
+      }, function() {
+          console.log('cancel');
+      });
+    }
+
+    require('ipc').on('about', function() {
+      require("smalltalk").alert('About', 'This application allows you to review and approve time.')
+    });
+
+    require('ipc').on('insertRow', function(message, level, type) {
+      var div = "<div class='row "
+      if(level=="success" || level=="warning" || level=="error"){
+        div += level
+      }
+      div += "'>"
+      if(type=="heading"){
+        div += "<div class='columns small-12'><h3>"+message+"</h3></div>"
+      }else if(type=="time"){
+        div += "<div class='columns large-3 message"+message.id+"'>"
+          div += "<div class='row'>"
+            div += "<div class='columns small-3'><button class='tiny radius' onClick=\"disapprove('"+message.id+"')\">"+"X"+"</button></div>"
+            div += "<div class='columns small-4'>"+message.date+"</div>"
+            div += "<div class='columns small-2'>"+message.time+"</div>"
+            div += "<div class='columns small-3'>"+message.billing+"</div>"
+          div += "</div>"
+        div += "</div>"
+        div += "<div class='columns large-9 message"+message.id+"'>"
+          div += "<div class='row'>"
+            div += "<div class='columns small-3'>"+message.task+"</div>"
+            div += "<div class='columns small-3'>"+message.proposal+"</div>"
+            div += "<div class='columns small-6'>"+message.description+"</div>"
+          div += "</div>"
+        div += "</div>"
+      }else{
+        div += "<div class='columns small-12'>"+message+"</div>"
+      }
+      div += "</div>"
+      $("#console").append(div)
+    });
+  </script>
+  <div id="console"></div>
+</body>
+</html>

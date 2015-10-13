@@ -1,0 +1,15 @@
+.error {
+    color:#B80000
+}
+
+.warning {
+    color:goldenrod
+}
+
+.success {
+    color:green
+}
+
+div.row {
+	max-width: 100%;
+}

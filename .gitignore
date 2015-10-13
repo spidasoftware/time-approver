@@ -26,3 +26,8 @@ build/Release
 
 # Users Environment Variables
 .lock-wscript
+
+tmp
+build
+cache
+node_modules
