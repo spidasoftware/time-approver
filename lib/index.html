@@ -11,21 +11,26 @@
   <script>
 
     var disapprove = function(id, originalReason){
-      var smalltalk = require("smalltalk");
       var ipc = require('ipc');
-      var value = $("input"+id).val();
-      $('#div_' + element_id)[0].scrollIntoView( true );
+      var value = $("#input"+id).val();
       var disapproved = ipc.sendSync('disapprove', id, originalReason+": "+value);
       if(disapproved){
         $(".message"+id).addClass("error")
       }else{
-        smalltalk.alert('Error', 'There was an error!')
+        require("smalltalk").alert('Error', 'There was an error!')
       }
+      toggle(id);
     }
 
     var toggle = function(id){
       $('#row' + id).toggle();
-      $('#row' + id)[0].scrollIntoView( true );
+      var offset = $('#row' + id).offset(); // Contains .top and .left
+      offset.left -= 20;
+      offset.top -= 20;
+      $('html, body').animate({
+        scrollTop: offset.top,
+        scrollLeft: offset.left
+      });
     }
 
     require('ipc').on('about', function() {
@@ -45,13 +50,13 @@
         div += "<div class='columns large-4 message"+message.id+"'>"
           div += "<div class='row'>"
             div += "<div class='columns small-3'><a href='#' onClick='toggle(\""+message.id+"\")'>"+"X</a>"
-              div += '<div id="row'+message.id+'" class="row collapse postfix-round" style="display:none;"><div class="small-9 columns"><input type="text" id="input'+message.id+'" placeholder="Reason"></div>'
-                div += "<div class='small-3 columns'><a href='#' class='button postfix' onClick=\"disapprove('"+message.id+"', '"+m+"')\">Go</a></div>"
-              div += "</div>"
             div += "</div>"
             div += "<div class='columns small-4'>"+message.date+"</div>"
             div += "<div class='columns small-2'>"+message.time+"</div>"
             div += "<div class='columns small-3'>"+message.billing+"</div>"
+          div += "</div>"
+          div += '<div id="row'+message.id+'" class="row collapse postfix-round" style="display:none;"><div class="small-9 columns"><input type="text" id="input'+message.id+'" placeholder="Reason"></div>'
+            div += "<div class='small-3 columns'><a href='#' class='button postfix' onClick=\"disapprove('"+message.id+"', '"+m+"')\">Go</a></div>"
           div += "</div>"
         div += "</div>"
         div += "<div class='columns large-8 message"+message.id+"'>"
@@ -68,6 +73,13 @@
       $("#console").append(div)
     });
   </script>
+  <nav class="top-bar" data-topbar role="navigation">
+    <ul class="title-area">
+      <li class="name">
+        <h1><a href="#">Time Approver</a></h1>
+      </li>
+    </ul>
+  </nav>
   <div id="console"></div>
 </body>
 </html>
