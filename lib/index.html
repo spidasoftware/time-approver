@@ -13,13 +13,19 @@
     var disapprove = function(id, originalReason){
       var smalltalk = require("smalltalk");
       var ipc = require('ipc');
-      console.log(originalReason+": "+value);
-      // var disapproved = ipc.sendSync('disapprove', id, originalReason+": "+value);
+      var value = $("input"+id).val();
+      $('#div_' + element_id)[0].scrollIntoView( true );
+      var disapproved = ipc.sendSync('disapprove', id, originalReason+": "+value);
       if(disapproved){
         $(".message"+id).addClass("error")
       }else{
         smalltalk.alert('Error', 'There was an error!')
       }
+    }
+
+    var toggle = function(id){
+      $('#row' + id).toggle();
+      $('#row' + id)[0].scrollIntoView( true );
     }
 
     require('ipc').on('about', function() {
@@ -38,7 +44,11 @@
         var m = message.description.split("'").join("\\'")
         div += "<div class='columns large-4 message"+message.id+"'>"
           div += "<div class='row'>"
-            div += "<div class='columns small-3'><a href='#' onClick=\"disapprove('"+message.id+"', '"+m+"')\">"+"X"+"</a><input type='text'/></div>"
+            div += "<div class='columns small-3'><a href='#' onClick='toggle(\""+message.id+"\")'>"+"X</a>"
+              div += '<div id="row'+message.id+'" class="row collapse postfix-round" style="display:none;"><div class="small-9 columns"><input type="text" id="input'+message.id+'" placeholder="Reason"></div>'
+                div += "<div class='small-3 columns'><a href='#' class='button postfix' onClick=\"disapprove('"+message.id+"', '"+m+"')\">Go</a></div>"
+              div += "</div>"
+            div += "</div>"
             div += "<div class='columns small-4'>"+message.date+"</div>"
             div += "<div class='columns small-2'>"+message.time+"</div>"
             div += "<div class='columns small-3'>"+message.billing+"</div>"
