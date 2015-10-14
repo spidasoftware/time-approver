@@ -37,6 +37,10 @@
       require("smalltalk").alert('About', 'This application allows you to review and approve time.')
     });
 
+
+    /**
+    * TODO This really needs some templating
+    */
     require('ipc').on('insertRow', function(message, level, type) {
       var div = "<div class='row "
       if(level=="success" || level=="warning" || level=="error"){
