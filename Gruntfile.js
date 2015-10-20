@@ -18,7 +18,7 @@ module.exports = function (grunt) {
         },
         'exec':{
           install:{
-            cmd:'pushd tmp; npm install --production; popd'
+            cmd:'cd tmp; npm install --production; cd ..'
           }
         }
     });
