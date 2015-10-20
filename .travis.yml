@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "0.10"
+before_script:
+  - npm install grunt-cli -g
+
+deploy:
+  provider: bintray
+  file: "Path to a descriptor file, containing information for the Bintray upload"
+  user: "Bintray user"
+  key: "Bintray API key"
