@@ -4,8 +4,9 @@ module.exports = function (grunt) {
         clean: ["build", "tmp" ],
         'build-electron-app': {
             options: {
-               platforms: ["darwin", "win32"],
-                app_dir: "tmp"
+              platforms: ["darwin", "win32"],
+              app_dir: "tmp",
+              electron_version:"v0.34.0"
             }
         },
         'copy': {
