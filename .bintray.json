@@ -1,0 +1,27 @@
+{
+    "package": {
+        "name": "auto-upload", // Bintray package name
+        "repo": "time-approver",
+        "subject": "spidasoftware",
+        "desc": "I was pushed completely automatically",
+        "website_url": "www.spidasoftware.com",
+        "issue_tracker_url": "https://github.com/spidasoftware/time-approver/issues",
+        "vcs_url": "https://github.com/spidasoftware/time-approver.git",
+        "github_use_tag_release_notes": true,
+        "licenses": ["MIT"],
+        "labels": ["time"],
+        "public_download_numbers": false,
+        "public_stats": false
+    },
+    "version": {
+        "name": "0.1",
+        "desc": "This is a version",
+        "vcs_tag": "0.1",
+        "gpgSign": false
+    },
+    "files":
+        [
+          {"includePattern": "build/.*"}
+        ],
+    "publish": true
+}
