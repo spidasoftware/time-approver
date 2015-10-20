@@ -30,4 +30,5 @@ build/Release
 tmp
 build
 cache
+dist
 node_modules

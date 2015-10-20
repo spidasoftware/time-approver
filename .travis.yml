@@ -4,7 +4,6 @@ node_js:
 - '0.12.7'
 before_script:
 - npm install grunt-cli -g
-before_deploy: grunt
 deploy:
   provider: bintray
   file: .bintray.json

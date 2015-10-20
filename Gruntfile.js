@@ -48,5 +48,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-zip');
 
   grunt.registerTask('rename', ['exec:copyIcon', 'exec:renameApp', 'exec:renameExe']);
-  grunt.registerTask('default', ['clean', 'copy', 'exec:install', 'build-electron-app', 'rename', 'zip']);
+  grunt.registerTask('default', ['clean', 'copy', 'exec:install', 'build-electron-app', 'rename']);
 };
