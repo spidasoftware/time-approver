@@ -1,8 +1,8 @@
 {
   "name": "time-approver-app",
-  "description":"approve your employees time",
+  "description": "approve your employees time",
   "productName": "Time Approver",
-  "repository":"https://github.com/spidasoftware/time-approver.git",
+  "repository": "https://github.com/spidasoftware/time-approver.git",
   "version": "0.1.0",
   "main": "lib/main.js",
   "dependencies": {
@@ -25,6 +25,7 @@
     "decompress-zip": "^0.2.0",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-compress": "^0.13.0",
     "grunt-contrib-copy": "^0.8.1",
     "grunt-electron-app-builder": "^0.1.0",
     "grunt-exec": "^0.4.6",

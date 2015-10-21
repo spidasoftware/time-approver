@@ -36,8 +36,8 @@ module.exports = function(grunt) {
       }
     },
     'zip' : {
-      'dist/win32-time-approver.zip': ['build/win32/**'],
-      'dist/darwin-time-approver.zip': ['build/darwin/**']
+      'dist/windows-time-approver.zip': ['build/win32/**'],
+      'dist/osx-time-approver.zip': ['build/darwin/**']
     }
   });
 
@@ -48,5 +48,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-zip');
 
   grunt.registerTask('rename', ['exec:copyIcon', 'exec:renameApp', 'exec:renameExe']);
-  grunt.registerTask('default', ['clean', 'copy', 'exec:install', 'build-electron-app', 'rename']);
+  grunt.registerTask('default', ['clean', 'copy', 'exec:install', 'build-electron-app', 'rename', 'zip']);
 };
