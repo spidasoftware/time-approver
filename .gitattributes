@@ -1,2 +1,2 @@
-*.zip filter=lfs -text
 dist/*.zip filter=lfs -text
+dist/*.gz filter=lfs -text
