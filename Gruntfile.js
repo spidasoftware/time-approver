@@ -36,9 +36,6 @@ module.exports = function(grunt) {
       },
       'zipWin' : {
         cmd: 'cd build/win32;zip -r windows-time-approver.zip .;mkdir ../../dist;mv windows-time-approver.zip ../../dist/windows-time-approver.zip'
-      },
-      'zipOsx' : {
-        cmd: 'cd build/darwin;tar -zcvf osx-time-approver.tar.gz .;mv osx-time-approver.tar.gz ../../dist/osx-time-approver.tar.gz'
       }
     },
   });
@@ -49,6 +46,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-exec');
 
   grunt.registerTask('rename', ['exec:copyIcon', 'exec:renameApp', 'exec:renameExe']);
-  grunt.registerTask('zip', ['exec:zipWin', 'exec:zipOsx']);
+  grunt.registerTask('zip', ['exec:zipWin']);
   grunt.registerTask('default', ['clean', 'copy', 'exec:install', 'build-electron-app', 'rename', 'zip']);
 };
